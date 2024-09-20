@@ -1,17 +1,47 @@
-use std::io::{Read, Result};
+use std::error;
 use std::fs::File;
-use std::path::Path;
+use std::io::{self, Error, Read};
 
-fn main() -> Result<()> {
-    let path = Path::new("Cargo.lock");
-    let filename = path.display();
+fn main() -> io::Result<()> {
+    let filename = "Cargo.toml";
 
-    let mut file = File::open(&path).unwrap();
+    let (nbytes, _content) = read_file(filename)?;
 
-    let mut text = String::new();
-    if let Ok(nbytes) = file.read_to_string(&mut text) {
-        println!("Opening file ({filename}) with a size of ({nbytes} bytes)");
+    println!("Opening file ({filename}) with a size of ({nbytes} bytes)");
+
+    Ok(())
+}
+
+fn read_file<'a>(filename: &str) -> Result<(usize, String), Error> {
+    let mut file = File::open(filename)?;
+
+    let mut buffer = String::new();
+
+    let nbytes = file.read_to_string(&mut buffer)?;
+
+    Ok((nbytes, buffer))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn open_file() {
+        let filename = "../tests-data/.env";
+
+        let (nbytes, _content) = read_file(filename).unwrap();
+
+        assert!(nbytes == 252, "ERROR: the size seems off");
     }
     
-    Ok(())
+    #[test]
+    #[should_panic(expected = "kind: NotFound")]
+    fn open_non_existent_file() {
+        let filename = "i-dont-exist";
+
+        let (nbytes, _content) = read_file(filename).unwrap();
+
+        assert!(nbytes == 252, "ERROR: the size seems off");
+    }
 }
