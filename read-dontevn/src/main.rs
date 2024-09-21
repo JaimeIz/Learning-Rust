@@ -1,4 +1,3 @@
-use std::error;
 use std::fs::File;
 use std::io::{self, Error, Read};
 
@@ -40,6 +39,6 @@ mod tests {
     fn open_non_existent_file() {
         let filename = "i-dont-exist";
 
-        let (nbytes, _content) = read_file(filename).unwrap();
+        read_file(filename).unwrap();
     }
 }
