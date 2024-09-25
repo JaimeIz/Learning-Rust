@@ -1,6 +1,6 @@
 [package]
-name = "variables-from-dotenv"
-version = "0.1.0"
+name = "parse-dotenv"
+version = "0.2.0"
 edition = "2021"
 
 [dependencies]

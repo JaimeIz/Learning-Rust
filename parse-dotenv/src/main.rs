@@ -3,6 +3,8 @@ use std::fs::File;
 use std::io::Read;
 use std::path::Path;
 
+mod parser;
+
 fn main() {
     let path = Path::new("Cargo.lock");
     let filename = path.display();
